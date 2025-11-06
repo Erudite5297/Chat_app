@@ -9,12 +9,18 @@ const allowedSocketOrigins = [
   process.env.CLIENT_URL,
   "http://localhost:5173",
   "http://127.0.0.1:5173",
-  "https://erudite-project.netlify.app/",
+  "https://erudite-project.netlify.app",
 ].filter(Boolean);
 
 const io = new Server(server, {
   cors: {
-    origin: allowedSocketOrigins,
+    origin: (origin, callback) => {
+      if (!origin) return callback(null, true);
+      const isExactAllowed = allowedSocketOrigins.includes(origin);
+      const isNetlify = /^https:\/\/[a-z0-9-]+\.[a-z0-9-]+\.netlify\.app$/.test(origin);
+      if (isExactAllowed || isNetlify) return callback(null, true);
+      return callback(null, false);
+    },
     credentials: true,
   },
 });

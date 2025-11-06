@@ -27,7 +27,9 @@ app.use(
   cors({
     origin: function (origin, callback) {
       if (!origin) return callback(null, true); // same-origin or tools
-      if (allowedOrigins.includes(origin)) return callback(null, true);
+      const isExactAllowed = allowedOrigins.includes(origin);
+      const isNetlify = /^https:\/\/[a-z0-9-]+\.[a-z0-9-]+\.netlify\.app$/.test(origin);
+      if (isExactAllowed || isNetlify) return callback(null, true);
       return callback(null, false); // gracefully reject without throwing
     },
     credentials: true,
