@@ -16,7 +16,7 @@ const __dirname = path.resolve();
 
 app.use(
   cors({
-    origin: ["https://erudite-project.netlify.app/", "http://localhost:5173"],
+    origin: "*",
     credentials: true,
   })
 );
