@@ -14,9 +14,11 @@ dotenv.config();
 const PORT = process.env.PORT;
 const __dirname = path.resolve();
 
+app.set("trust proxy", 1);
+
 app.use(
   cors({
-    origin: "*",
+    origin: "https://erudite-project.netlify.app",
     credentials: true,
   })
 );
