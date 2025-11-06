@@ -4,6 +4,7 @@ import bcrypt from "bcryptjs";
 import cloudinary from "../lib/cloudinary.js";
 
 export const signup = async (req, res) => {
+  console.log("signup controller called");
   const { fullName, email, password } = req.body;
   try {
     if (!fullName || !email || !password) {

@@ -16,10 +16,30 @@ const __dirname = path.resolve();
 
 app.set("trust proxy", 1);
 
+const allowedOrigins = [
+  process.env.CLIENT_URL,
+  "http://localhost:5173",
+  "http://127.0.0.1:5173",
+  "https://erudite-project.netlify.app/",
+].filter(Boolean);
+
 app.use(
   cors({
-    origin: "https://erudite-project.netlify.app",
+    origin: function (origin, callback) {
+      if (!origin) return callback(null, true); // same-origin or tools
+      if (allowedOrigins.includes(origin)) return callback(null, true);
+      return callback(null, false); // gracefully reject without throwing
+    },
     credentials: true,
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: [
+      "Content-Type",
+      "Authorization",
+      "X-Requested-With",
+      "Accept",
+      "Origin",
+    ],
+    optionsSuccessStatus: 204,
   })
 );
 
